@@ -1,7 +1,7 @@
 // model
-import balanceModel from '../../../model/wallet/BalanceModel.js';
-import depositLogModel from '../../../model/log/depositLogModel.js';
-import transferLogModel from '../../../model/log/transferLogModel.js';
+import balanceModel from '../../../model/finance/BalanceModel.js';
+import depositLogModel from '../../../model/finance/log/depositLogModel.js';
+import transferLogModel from '../../../model/finance/log/transferLogModel.js';
 
 class repository {
 

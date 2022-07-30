@@ -1,5 +1,5 @@
 // model
-import loginModel from '../../../model/client/LoginModel.js';
+import loginModel from '../../../../model/client/LoginModel.js';
 
 import {nanoid} from 'nanoid';
 

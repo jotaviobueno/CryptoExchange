@@ -1,9 +1,9 @@
 // repository
-import repository from '../../repository/client/AuthLoginRepository.js';
+import repository from '../../../repository/client/Auth/AuthLoginRepository.js';
 
 // helpers
-import verifyUser from '../../../helper/client/ClientHelper.js';
-import responseHelper from '../../../helper/ResponseHelper.js';
+import verifyUser from '../../../../helper/client/ClientHelper.js';
+import responseHelper from '../../../../helper/ResponseHelper.js';
 
 class Auth {
 

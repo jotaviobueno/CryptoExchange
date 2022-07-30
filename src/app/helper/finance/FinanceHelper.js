@@ -1,5 +1,5 @@
 // model
-import balanceModel from '../../model/wallet/BalanceModel.js';
+import balanceModel from '../../model/finance/BalanceModel.js';
 
 class finance {
     

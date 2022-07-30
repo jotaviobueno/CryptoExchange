@@ -1,6 +1,6 @@
 // model
 import ClientModel from '../../../model/client/ClientModel.js';
-import balanceModel from '../../../model/wallet/BalanceModel.js';
+import balanceModel from '../../../model/finance/BalanceModel.js';
 
 import bcrypt from 'bcrypt';
 
