@@ -33,6 +33,49 @@ class Change {
         
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
+
+    async changeEmail (req, res) {
+        const {change_token} = req.params;
+        const {new_email, password} = req.body;
+
+        const tokenInfo = await repository.verifyToken(change_token);
+
+        if (! tokenInfo)
+            return
+        
+        const clientInfo = await verifyUser.verifyUser(tokenInfo.email);
+
+        if (! clientInfo) 
+            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+
+        if (await verifyUser.verifyUser(new_email)) 
+            return await responseHelper.badRequest(res, {error: 'new Email exist.'});
+
+        if (! await verifyUser.comparePassword(password, clientInfo.password))
+            return 
+
+        if (clientInfo.email === new_email)
+            return
+
+        if (await repository.changeEmail(clientInfo.email, new_email)) {
+
+            await repository.createLogChangeEmail(clientInfo.email, new_email);
+
+            await repository.changeEmailDepositLog(clientInfo.email, new_email);
+
+            await repository.changeSentEmailTransferLog(clientInfo.email, new_email);
+
+            await repository.changeReceivedEmailTransferLog(clientInfo.email, new_email);
+
+            await repository.disconnectedAllSession(clientInfo.email);
+
+            await repository.deleteToken(change_token);
+
+            return
+        }
+
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
+    }
 }
 
 export default new Change();

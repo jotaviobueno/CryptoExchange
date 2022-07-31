@@ -15,10 +15,9 @@ class AuthToken {
 
         findAllTokens.forEach(async (token) => {
             if (new Date >= token.expires_at)
-                await findOneAndUpdate({change_token: token.change_token}, {status: false});
-        })
+                await tokensChangeEmail.findOneAndUpdate({change_token: token.change_token}, {status: false});
+        });
     }
-
 }
 
 export default new AuthToken();

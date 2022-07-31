@@ -38,7 +38,7 @@ class ClientHelper {
     }
 
     async disconnectedAllSession (email) {
-        await loginModel.updateMany({disconnected_in: new Date()});
+        await loginModel.updateMany({email: email}, {disconnected_in: new Date()});
     }
 }
 
