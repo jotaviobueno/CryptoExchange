@@ -8,6 +8,7 @@ import balanceModel from '../../../model/finance/BalanceModel.js';
 import depositHistoryModel from '../../../model/finance/log/depositLogModel.js';
 import transferHistoryModel from '../../../model/finance/log/transferLogModel.js';
 import changePasswordModel from '../../../model/client/log/ChangePasswordLogModel.js';
+import tokensChangePasswordModel from '../../../model/client/AuthToken/TokensChangePasswordModel.js';
 
 import bcrypt from 'bcrypt';
 
@@ -99,6 +100,15 @@ class repository {
             {password: await bcrypt.hash(new_password, 10), update_at: new Date()});
     
             return true;
+    }
+
+    async verifyTokenPassword (change_token) {
+        const findToken = await tokensChangePasswordModel.findOne({change_token: change_token, stats: null});
+
+        if (findToken === null)
+            return false;
+
+        return true, findToken;
     }
 
 }

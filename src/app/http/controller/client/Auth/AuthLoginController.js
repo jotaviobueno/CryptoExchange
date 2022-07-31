@@ -16,7 +16,7 @@ class Auth {
             return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
         
         if (! await verifyUser.comparePassword(password, clientInfo.password))
-            return
+            return await responseHelper.notAuthorized(res, {error: 'credentials its invalid.'});
         
         await verifyUser.disconnectedAllSession(clientInfo.email);
 

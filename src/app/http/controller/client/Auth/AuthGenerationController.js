@@ -33,10 +33,24 @@ class AuthGeneration {
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 
-    async tokenToChangePassword () {
+    async tokenToChangePassword (req, res) {
         const {email} = req.body;
 
+        await AuthHelper.verifyTokenDatePassword();
+
+        const clientInfo = await verifyUser.verifyUser(email);
+
+        if (! clientInfo) 
+            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+
+        await AuthHelper.checkAmountOfTokensToChangeTheUsersPassword(clientInfo.email);
+
+        const change_token = await repository.generationTokenToChangePassword(clientInfo.email);
         
+        if (change_token)
+            return await responseHelper.success(res, {change_token: change_token, expires_at: new Date().toString()});
+
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 }
 

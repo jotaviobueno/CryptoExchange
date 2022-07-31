@@ -4,6 +4,7 @@ import repository from '../../repository/client/ChangeRepository.js';
 // helpers
 import verifyUser from '../../../helper/client/ClientHelper.js';
 import responseHelper from '../../../helper/ResponseHelper.js';
+import AuthHelper from '../../../helper/client/AuthToken/AuthHelper.js';
 
 class Change {
 
@@ -38,6 +39,8 @@ class Change {
         const {change_token} = req.params;
         const {new_email, password} = req.body;
 
+        await AuthHelper.verifyTokenDate();
+
         const tokenInfo = await repository.verifyToken(change_token);
 
         if (! tokenInfo)
@@ -47,6 +50,8 @@ class Change {
 
         if (! clientInfo) 
             return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+        
+        await AuthHelper.checkAmountOfUserTokens(clientInfo.email);
 
         if (await verifyUser.verifyUser(new_email)) 
             return await responseHelper.badRequest(res, {error: 'new Email exist.'});
@@ -97,7 +102,7 @@ class Change {
         if (! await verifyUser.comparePassword(password, clientInfo.password))
             return await responseHelper.notAuthorized(res, {error: 'credentials its invalid.'});
 
-        if (await verifyUser.comparePassword(password, new_password))
+        if (password === new_password)
             return await responseHelper.badRequest(res, {error: 'password identical to the account.'});
 
         if (await repository.changePasswordV1(clientInfo.email, new_password)) {
@@ -114,7 +119,35 @@ class Change {
     }
 
     async changePasswordV2 (req, res) {
+        const {change_token} = req.params;
+        const {new_password} = req.body;
 
+        await AuthHelper.verifyTokenDatePassword();
+
+        const tokenInfo = await repository.verifyTokenPassword(change_token);
+
+        if (! tokenInfo)
+            return
+
+        const clientInfo = await verifyUser.verifyUser(tokenInfo.email);
+
+        if (! clientInfo) 
+            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+    
+        if (await verifyUser.comparePassword(new_password, clientInfo.password))
+            return await responseHelper.badRequest(res, {error: 'password identical to the account.'});
+
+        if (await repository.changePasswordV1(clientInfo.email, new_password)) {
+
+            await verifyUser.disconnectedAllSession(clientInfo.email);
+            
+            await repository.createLog(clientInfo.email);
+
+            return await responseHelper.success(res, 
+                {success: 'password changed, all sessions linked to your account have been disconnected.'});
+        }
+
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 }
 
