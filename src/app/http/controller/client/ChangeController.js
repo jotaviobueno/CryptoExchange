@@ -67,7 +67,7 @@ class Change {
 
             await repository.changeReceivedEmailTransferLog(clientInfo.email, new_email);
 
-            await repository.disconnectedAllSession(clientInfo.email);
+            await repository.deleteAllOldSession(clientInfo.email);
 
             await repository.deleteToken(change_token);
 
@@ -75,6 +75,42 @@ class Change {
         }
 
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
+    }
+
+    async changePasswordV1 (req, res) {
+        const {session_token} = req.params;
+        const {password, new_password} = req.body;
+
+        const sessionInfo = await verifyUser.verifySession(session_token);
+
+        if (! sessionInfo)
+            return await responseHelper.badRequest(res, {error: 'session its invalid.'});
+        
+        const clientInfo = await verifyUser.verifyUser(sessionInfo.email);
+
+        if (! clientInfo) 
+            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+
+        if (! await verifyUser.comparePassword(password, clientInfo.password))
+            return
+
+        if (await verifyUser.comparePassword(password, new_password))
+            return
+
+        if (await repository.changePasswordV1(clientInfo.email, new_password)) {
+
+            await verifyUser.disconnectedAllSession(clientInfo.email);
+            
+            await repository.createLog(clientInfo.email);
+
+            return
+        }
+
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
+    }
+
+    async changePasswordV2 (req, res) {
+
     }
 }
 

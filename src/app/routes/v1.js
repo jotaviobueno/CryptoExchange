@@ -16,6 +16,7 @@ router.post(`${apiInitial}/login/cpf`, AuthLoginController.loginByCpf);
 router.get(`${apiInitial}/logout/:session_token`, AuthLoginController.logout);
 router.post(`${apiInitial}/my-account/:session_token/change-name`, ChangeController.changeName);
 router.post(`${apiInitial}/change-email/:change_token`, ChangeController.changeEmail);
+router.post(`${apiInitial}/my-account/:session_token/change-password/`, ChangeController.changePasswordV1);
 
 router.get(`${apiInitial}/my-account/:session_token`, UserController.seeAccount);
 router.get(`${apiInitial}/my-account/:session_token/wallet`, FinanceController.seeBalance);

@@ -1,12 +1,15 @@
 // models
 import ClientModel from '../../../model/client/ClientModel.js';
+import loginModel from '../../../model/client/LoginModel.js';
 import tokensChangeEmailModel from '../../../model/client/AuthToken/TokensChangeEmailModel.js';
 import changeNameLog from '../../../model/client/log/ChangeNameLogModel.js';
 import changeEmailLog from '../../../model/client/log/ChangeEmailLogModel.js';
 import balanceModel from '../../../model/finance/BalanceModel.js';
 import depositHistoryModel from '../../../model/finance/log/depositLogModel.js';
 import transferHistoryModel from '../../../model/finance/log/transferLogModel.js';
-import loginModel from '../../../model/client/LoginModel.js';
+import changePasswordModel from '../../../model/client/log/ChangePasswordLogModel.js';
+
+import bcrypt from 'bcrypt';
 
 class repository {
 
@@ -31,14 +34,6 @@ class repository {
             return false;
 
         return true, findToken;
-    }
-
-    async createLogChangeEmail (OldEmail, NewEmail) {
-        await changeEmailLog.create({
-            old_email: OldEmail,
-            new_email: NewEmail,
-            change_in: new Date()});
-        return true;
     }
 
     async deleteToken (token) {
@@ -74,8 +69,17 @@ class repository {
             });
         }
     }
-    async disconnectedAllSession (email) {
+    async deleteAllOldSession (email) {
         await loginModel.deleteMany({email: email});
+    }
+
+    async createLogChangeEmail (OldEmail, NewEmail) {
+        await changeEmailLog.create({
+            old_email: OldEmail,
+            new_email: NewEmail,
+            change_in: new Date()});
+
+            return true;
     }
 
     async changeEmail (oldEmail, newEmail) {
@@ -83,7 +87,18 @@ class repository {
 
         await balanceModel.findOneAndUpdate({email: oldEmail, deleted_at: null}, {email: newEmail, update_at: new Date()});
 
-        return true;
+            return true;
+    }
+
+    async createLog (email) {
+        await changePasswordModel.create({email: email, change_in: new Date()});
+    }
+
+    async changePasswordV1 (email, new_password) {
+        await ClientModel.findOneAndUpdate({email: email, deleted_at: null}, 
+            {password: await bcrypt.hash(new_password, 10), update_at: new Date()});
+    
+            return true;
     }
 
 }

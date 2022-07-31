@@ -32,6 +32,12 @@ class AuthGeneration {
 
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
+
+    async tokenToChangePassword () {
+        const {email} = req.body;
+
+        
+    }
 }
 
 export default new AuthGeneration();
