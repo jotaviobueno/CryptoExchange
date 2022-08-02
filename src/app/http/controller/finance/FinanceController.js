@@ -9,7 +9,7 @@ import responseHelper from '../../../helper/ResponseHelper.js';
 class finance {
 
     async seeBalance (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
 
@@ -30,7 +30,8 @@ class finance {
     }
 
     async deposit (req, res) {
-        const {coin, session_token} = req.params;
+        const {session_token} = req.headers;
+        const {coin} = req.params;
         const {value} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
@@ -63,7 +64,8 @@ class finance {
     }
 
     async transfer (req, res) {
-        const {session_token, coin} = req.params;
+        const {session_token} = req.headers;
+        const {coin} = req.params;
         const {transfer_to, value} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);

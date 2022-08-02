@@ -9,7 +9,8 @@ import responseHelper from '../../../helper/ResponseHelper.js';
 class Crypto {
 
     async buy (req, res) {
-        const {session_token, stableCoin, cryptoName} = req.params;
+        const {session_token} = req.headers;
+        const {stableCoin, cryptoName} = req.params;
         const {amount} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
@@ -30,10 +31,10 @@ class Crypto {
 
         const coinPrice = await financeHelper.getCryptoPrice(stableCoin, cryptoName);
 
-        await repository.calculation(amount, coinPrice, stableCoin, cryptoName);
-
-        
         const clientBalance = await financeHelper.seeBalance(clientInfo.email);
+
+        await repository.calculation(amount, coinPrice, stableCoin, cryptoName, clientBalance);
+
 
 
 

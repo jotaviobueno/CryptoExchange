@@ -37,7 +37,7 @@ class Client {
     }
 
     async seeAccount (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
 
@@ -58,7 +58,7 @@ class Client {
     }
 
     async deleteAccount (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
         const {password} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);

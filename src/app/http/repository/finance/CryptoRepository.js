@@ -8,7 +8,8 @@ class repository {
         const CoinNameUpperCase = coinName.toUpperCase(); 
         
         const call = parseFloat(amount) / parseFloat(cryptoPrice[CoinNameUpperCase].bid);
-        console.log(cryptoPrice, call)
+        const a = parseFloat(amount) * parseFloat(cryptoPrice[CoinNameUpperCase].bid)+++;
+        console.log(a);
     }
 
     async buy (req, res) {

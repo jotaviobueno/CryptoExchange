@@ -9,7 +9,7 @@ import AuthHelper from '../../../../helper/client/AuthToken/AuthHelper.js';
 class AuthGeneration {
 
     async tokenToChangeTheEmail (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
 
         await AuthHelper.verifyTokenDate();
 

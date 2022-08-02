@@ -62,7 +62,7 @@ class Auth {
     }
 
     async logout (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
 

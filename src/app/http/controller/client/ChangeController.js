@@ -9,7 +9,7 @@ import AuthHelper from '../../../helper/client/AuthToken/AuthHelper.js';
 class Change {
 
     async changeName (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
         const {new_name, password} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
@@ -36,7 +36,7 @@ class Change {
     }
 
     async changeEmail (req, res) {
-        const {change_token} = req.params;
+        const {change_token} = req.headers;
         const {new_email, password} = req.body;
 
         await AuthHelper.verifyTokenDate();
@@ -86,7 +86,7 @@ class Change {
     }
 
     async changePasswordV1 (req, res) {
-        const {session_token} = req.params;
+        const {session_token} = req.headers;
         const {password, new_password} = req.body;
 
         const sessionInfo = await verifyUser.verifySession(session_token);
@@ -119,7 +119,7 @@ class Change {
     }
 
     async changePasswordV2 (req, res) {
-        const {change_token} = req.params;
+        const {change_token} = req.headers;
         const {new_password} = req.body;
 
         await AuthHelper.verifyTokenDatePassword();
