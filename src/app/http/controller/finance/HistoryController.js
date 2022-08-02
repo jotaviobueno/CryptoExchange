@@ -46,7 +46,8 @@ class History {
         const history = await repository.sentTransferHistory(clientInfo.email);
 
         if (history)
-            return await responseHelper.success(res, {sent_transfer_history: history, received_transfer_history: await repository.receivedTransferHistory(clientInfo.email)});
+            return await responseHelper.success(res, 
+                {sent_transfer_history: history, received_transfer_history: await repository.receivedTransferHistory(clientInfo.email)});
 
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }

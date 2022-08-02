@@ -5,10 +5,6 @@ import transferLogModel from '../../../model/finance/log/transferLogModel.js';
 
 class repository {
 
-    async seeBalance (email) {
-       return true, await balanceModel.findOne({email: email, deleted_at: null}).select({_id: 0, __v: 0, deleted_at: 0, created_in: 0, update_at: 0});
-    }
-
     async createDepositLog (email, cpf, value, coin) {
         return await depositLogModel.create({
             cpf: cpf,

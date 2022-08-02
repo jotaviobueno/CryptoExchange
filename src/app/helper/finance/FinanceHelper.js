@@ -1,6 +1,9 @@
 // model
 import balanceModel from '../../model/finance/BalanceModel.js';
 
+import axios from 'axios';
+import dotenv from 'dotenv';
+
 class finance {
     
     async getBalance (email) {
@@ -23,6 +26,33 @@ class finance {
         return true;
 
     }
+
+    async verifyCrypto (crypto) {
+        const fiatCryptoArray = [{coin: "btc"}, {coin: "xrp"}, {coin: "eth"}, {coin: "ltc"}];
+
+        const filter = fiatCryptoArray.filter((coin) => coin.coin === crypto);
+
+        if (filter.length != 1)
+            return false;
+
+        return true;
+
+    }
+
+    async seeBalance (email) {
+        return true, await balanceModel.findOne({email: email, deleted_at: null}).select({_id: 0, __v: 0, deleted_at: 0, created_in: 0, update_at: 0});
+    }
+
+    async getCryptoPrice (stableCoin, cryptoName) {
+        try {
+            const price = await axios.get(`https://economia.awesomeapi.com.br/last/${cryptoName}-${stableCoin}`);
+
+            return price.data
+
+        } catch (e) {
+            return false;
+        }
+    } 
 }
 
 export default new finance();

@@ -7,6 +7,7 @@ import FinanceController from '../http/controller/finance/FinanceController.js';
 import HistoryController from '../http/controller/finance/HistoryController.js';
 import ChangeController from '../http/controller/client/ChangeController.js';
 import GetTokenController from '../http/controller/client/auth/AuthGenerationController.js';
+import CryptoController from '../http/controller/finance/CryptoController.js';
 
 const apiInitial = "/api/v1"
 
@@ -31,3 +32,5 @@ router.get(`${apiInitial}/my-account/transfer-history/:session_token`, HistoryCo
 
 router.get(`${apiInitial}/:session_token/get-token/change-email`, GetTokenController.tokenToChangeTheEmail);
 router.get(`${apiInitial}/get-token/change-password`, GetTokenController.tokenToChangePassword);
+
+router.post(`${apiInitial}/:session_token/buy/:stableCoin/:cryptoName`, CryptoController.buy);

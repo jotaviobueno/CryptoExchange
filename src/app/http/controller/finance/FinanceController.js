@@ -21,7 +21,7 @@ class finance {
         if (! clientInfo) 
             return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
 
-        const clientBalance = await repository.seeBalance(clientInfo.email);
+        const clientBalance = await financeHelper.seeBalance(clientInfo.email);
 
         if (clientBalance)
             return await responseHelper.success(res, {balance: clientBalance});
@@ -55,7 +55,8 @@ class finance {
 
             const deposit_id = await repository.createDepositLog(clientInfo.email, clientInfo.cpf, value, coin);
 
-            return await responseHelper.success(res, {deposit_id: deposit_id._id, deposit_status: "success", deposit_date: new Date().toString()});
+            return await responseHelper.success(res, 
+                {deposit_id: deposit_id._id, deposit_status: "success", deposit_date: new Date().toString()});
         }
 
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
@@ -79,7 +80,8 @@ class finance {
         const transferClientInfo = await verifyUser.verifyUser(transfer_to);
 
         if (! transferClientInfo)
-            return await responseHelper.badRequest(res, {error: 'the person you are trying to send the money to does not exist in our database.'});
+            return await responseHelper.badRequest(res, 
+                {error: 'the person you are trying to send the money to does not exist in our database.'});
 
         if (clientInfo.email === transferClientInfo.email)
             return await responseHelper.badRequest(res, {error: 'you cannot transfer to yourself.'});
@@ -101,7 +103,8 @@ class finance {
             
             const transfer_id = await repository.createTransferLog(clientInfo, transferClientInfo, coin, value);
 
-            return await responseHelper.success(res, {transfer_id: transfer_id._id, transfer_status: "success", transfer_date: new Date().toString()});
+            return await responseHelper.success(res, 
+                {transfer_id: transfer_id._id, transfer_status: "success", transfer_date: new Date().toString()});
         }
     }
 }
