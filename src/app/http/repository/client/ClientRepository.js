@@ -16,7 +16,7 @@ class repository {
         //   fiat: {
             usd: 0,
             brl: 0,
-            euro: 0,
+            eur: 0,
             ars: 0,
             rub: 0,
         //   },

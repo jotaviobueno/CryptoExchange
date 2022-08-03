@@ -8,7 +8,7 @@ const transferLog = mongoose.model('transferLog', {
     // value
         usd: Number,
         brl: Number,
-        euro: Number,
+        eur: Number,
         ars: Number,
         rub: Number,
 });

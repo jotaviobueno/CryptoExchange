@@ -8,7 +8,7 @@ const depositLog = mongoose.model('depositLog', {
     // value
         usd: Number,
         brl: Number,
-        euro: Number,
+        eur: Number,
         ars: Number,
         rub: Number,
 });

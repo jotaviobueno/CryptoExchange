@@ -2,7 +2,6 @@
 import balanceModel from '../../model/finance/BalanceModel.js';
 
 import axios from 'axios';
-import dotenv from 'dotenv';
 
 class finance {
     
@@ -16,7 +15,7 @@ class finance {
     }
 
     async verifyCoin (firstCoin) {
-        const fiatCoinArray = [{coin: "usd"}, {coin: "brl"}, {coin: "euro"}, {coin: "ars"}, {coin: "rub"}];
+        const fiatCoinArray = [{coin: "usd"}, {coin: "brl"}, {coin: "eur"}, {coin: "ars"}, {coin: "rub"}];
 
         const filter = fiatCoinArray.filter((coin) => coin.coin === firstCoin);
 
@@ -24,7 +23,6 @@ class finance {
             return false;
 
         return true;
-
     }
 
     async verifyCrypto (crypto) {
@@ -36,7 +34,6 @@ class finance {
             return false;
 
         return true;
-
     }
 
     async seeBalance (email) {

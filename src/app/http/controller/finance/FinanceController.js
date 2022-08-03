@@ -108,6 +108,8 @@ class finance {
             return await responseHelper.success(res, 
                 {transfer_id: transfer_id._id, transfer_status: "success", transfer_date: new Date().toString()});
         }
+    
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 }
 

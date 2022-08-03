@@ -35,8 +35,41 @@ class Change {
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 
+    async changePasswordV1 (req, res) {
+        const {session_token} = req.headers;
+        const {password, new_password} = req.body;
+
+        const sessionInfo = await verifyUser.verifySession(session_token);
+
+        if (! sessionInfo)
+            return await responseHelper.badRequest(res, {error: 'session its invalid.'});
+        
+        const clientInfo = await verifyUser.verifyUser(sessionInfo.email);
+
+        if (! clientInfo) 
+            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
+
+        if (! await verifyUser.comparePassword(password, clientInfo.password))
+            return await responseHelper.notAuthorized(res, {error: 'credentials its invalid.'});
+
+        if (password === new_password)
+            return await responseHelper.badRequest(res, {error: 'password identical to the account.'});
+
+        if (await repository.changePasswordV1(clientInfo.email, new_password)) {
+
+            await verifyUser.disconnectedAllSession(clientInfo.email);
+            
+            await repository.createLog(clientInfo.email);
+
+            return await responseHelper.success(res, 
+                {success: 'password changed, all sessions linked to your account have been disconnected.'});
+        }
+
+        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
+    }
+
     async changeEmail (req, res) {
-        const {change_token} = req.headers;
+        const {change_token} = req.params;
         const {new_email, password} = req.body;
 
         await AuthHelper.verifyTokenDate();
@@ -85,41 +118,8 @@ class Change {
         return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
     }
 
-    async changePasswordV1 (req, res) {
-        const {session_token} = req.headers;
-        const {password, new_password} = req.body;
-
-        const sessionInfo = await verifyUser.verifySession(session_token);
-
-        if (! sessionInfo)
-            return await responseHelper.badRequest(res, {error: 'session its invalid.'});
-        
-        const clientInfo = await verifyUser.verifyUser(sessionInfo.email);
-
-        if (! clientInfo) 
-            return await responseHelper.badRequest(res, {error: 'E-mail already registered.'});
-
-        if (! await verifyUser.comparePassword(password, clientInfo.password))
-            return await responseHelper.notAuthorized(res, {error: 'credentials its invalid.'});
-
-        if (password === new_password)
-            return await responseHelper.badRequest(res, {error: 'password identical to the account.'});
-
-        if (await repository.changePasswordV1(clientInfo.email, new_password)) {
-
-            await verifyUser.disconnectedAllSession(clientInfo.email);
-            
-            await repository.createLog(clientInfo.email);
-
-            return await responseHelper.success(res, 
-                {success: 'password changed, all sessions linked to your account have been disconnected.'});
-        }
-
-        return await responseHelper.unprocessableEntity(res, {error: 'it was not possible to proceed'});
-    }
-
     async changePasswordV2 (req, res) {
-        const {change_token} = req.headers;
+        const {change_token} = req.params;
         const {new_password} = req.body;
 
         await AuthHelper.verifyTokenDatePassword();

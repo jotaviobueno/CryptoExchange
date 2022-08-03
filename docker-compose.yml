@@ -1,0 +1,19 @@
+
+version: '3.9'
+services:
+  backend:
+    build: ./
+    container_name: binanceAPI
+    ports:
+      - 3001:3001
+    environment:
+      - PORT=3001
+      - DB_LINK=mongodb://db:27017/binanceAPI
+  db:
+      image : mongo
+      container_name: mongodb
+      volumes:
+      - /home/barry/mongodb/database:/data/db
+      ports:
+      - 27017:27017
+      restart: unless-stopped

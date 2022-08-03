@@ -11,7 +11,7 @@ const BalanceModel = mongoose.model('Balance', {
     // fiat
         usd: Number,
         brl: Number,
-        euro: Number,
+        eur: Number,
         ars: Number,
         rub: Number,
 
