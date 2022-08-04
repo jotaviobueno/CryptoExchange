@@ -1,14 +1,17 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import {router} from './app/routes/v1.js';
+import {FinanceRoutes} from './app/routes/FinanceRoutes.js';
+import {ClientRoutes} from './app/routes/ClientRoutes.js';
 
 const app = express();
 
 dotenv.config();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use('/', router);
+
+app.use('/', FinanceRoutes);
+app.use('/', ClientRoutes);
 
 mongoose.connect(process.env.DB_LINK).then(() => {
     console.log('connected to mongoose');
