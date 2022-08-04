@@ -34,3 +34,4 @@ router.get(`${apiInitial}/get-token/change-email`, GetTokenController.tokenToCha
 router.get(`${apiInitial}/get-token/change-password`, GetTokenController.tokenToChangePassword);
 
 router.post(`${apiInitial}/buy/:stableCoin/:cryptoName`, CryptoController.buy);
+router.post(`${apiInitial}/sell/:cryptoName/:stableCoin`, CryptoController.sell);
