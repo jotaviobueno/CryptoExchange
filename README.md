@@ -1,7 +1,7 @@
 # Projeto CryptoExchange
 Uma API para estudos. Possui 19 endpoints.
 
-Como usar, abrir o terminal e usar os seguintes comandos:
+Abrir o terminal e usar os seguintes comandos:
 
 ```shell
 npm i
