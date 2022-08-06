@@ -10,7 +10,7 @@ npm i
 Fazer as requisicoes no endereço:
 
 ```ip
-localhost:8081/api/v1/
+localhost:8081/api/v1/:ROUTE_NAME
 ```
 
 ## Exemplos de requisição
