@@ -32,15 +32,15 @@ class Crypto {
         const coinPrice = await financeHelper.getCryptoPrice(stableCoin, cryptoName);
 
         if (! coinPrice)
-            return await responseHelper.badRequest(res, {error: 'paridade de moeda n encontrada.'});
+            return await responseHelper.badRequest(res, {error: 'parity with the coin not found.'});
 
         const clientBalance = await financeHelper.seeBalance(clientInfo.email);
 
         if (value > clientBalance[stableCoin])
-            return await responseHelper.badRequest(res, {error: 'você não tem dinheiro suficiente para isso.'});
+            return await responseHelper.badRequest(res, {error: 'you dont have enough money for that.'});
 
         if (value <= 5)
-            return await responseHelper.badRequest(res, {error: 'valor menor que 5.'});
+            return await responseHelper.badRequest(res, {error: 'purchase value may not be less than 5.'});
 
         const buyInfo = await repository.buy(value, coinPrice, stableCoin, cryptoName, clientBalance, clientInfo);
 
@@ -77,12 +77,12 @@ class Crypto {
         const coinPrice = await financeHelper.getCryptoPrice(stableCoin, cryptoName);
 
         if (! coinPrice)
-            return await responseHelper.badRequest(res, {error: 'paridade de moeda n encontrada.'});
+            return await responseHelper.badRequest(res, {error: 'parity with the coin not found.'});
 
         const clientBalance = await financeHelper.seeBalance(clientInfo.email);
 
         if (value > clientBalance[cryptoName])
-            return await responseHelper.badRequest(res, {error: 'você não tem dinheiro suficiente para isso.'});
+            return await responseHelper.badRequest(res, {error: 'you do not have this amount to be able to make this sale'});
 
         const sellInfo = await repository.sell(value, coinPrice, stableCoin, cryptoName, clientBalance, clientInfo);
 
